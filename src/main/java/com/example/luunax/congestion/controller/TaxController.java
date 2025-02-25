@@ -2,6 +2,8 @@ package com.example.luunax.congestion.controller;
 
 import com.example.luunax.congestion.calculator.Car;
 import com.example.luunax.congestion.calculator.CongestionTaxCalculator;
+import com.example.luunax.congestion.calculator.Motorbike;
+import com.example.luunax.congestion.calculator.Vehicle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,15 +25,22 @@ public class TaxController {
 
     @PostMapping
     public int calculateTax(@RequestBody TaxCalculatorParams params) throws ParseException {
-        Car vehicle = new Car();
-
-        return taxCalculator.getTax(vehicle, params.getSerializedDates());
+        return taxCalculator.getTax(params.getVehicle(), params.getSerializedDates());
     }
 }
 
 record TaxCalculatorParams(
+    String vehicleType,
     String[] dates
 ) {
+
+    public Vehicle getVehicle() {
+        return switch (vehicleType) {
+            case "Car" -> new Car();
+            case "Motorbike" -> new Motorbike();
+            default -> null;
+        };
+    }
 
     public Date[] getSerializedDates() throws ParseException {
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
