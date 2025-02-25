@@ -9,7 +9,8 @@ public class CongestionTaxCalculator {
 
     private final TollFeeProvider tollFeeProvider;
 
-    public CongestionTaxCalculator(TollFeeProvider tollFeeProvider) {
+    public CongestionTaxCalculator(
+        TollFeeProvider tollFeeProvider) {
         this.tollFeeProvider = tollFeeProvider;
     }
 

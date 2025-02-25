@@ -2,12 +2,15 @@ package com.example.luunax.congestion.data;
 
 import com.example.luunax.congestion.calculator.TollFeeProvider;
 import com.example.luunax.congestion.calculator.Vehicle;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class InMemoryTollFeeProvider implements TollFeeProvider {
 
     private static Map<String, Integer> tollFreeVehicles = new HashMap<>();
