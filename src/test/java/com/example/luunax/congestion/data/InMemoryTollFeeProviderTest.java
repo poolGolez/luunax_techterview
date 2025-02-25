@@ -1,5 +1,8 @@
-package com.example.luunax.congestion.calculator;
+package com.example.luunax.congestion.data;
 
+import com.example.luunax.congestion.calculator.Car;
+import com.example.luunax.congestion.calculator.Motorbike;
+import com.example.luunax.congestion.calculator.Vehicle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -10,19 +13,19 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class CongestionTaxCalculatorGetTollFeeTest {
+class InMemoryTollFeeProviderTest {
 
-    private CongestionTaxCalculator calculator;
+    private InMemoryTollFeeProvider calculator;
 
     @BeforeEach
     void setUp() {
-        calculator= new CongestionTaxCalculator();
+        calculator = new InMemoryTollFeeProvider();
     }
 
     @ParameterizedTest
     @MethodSource("getTollFeeArgsForTaxableTime")
     void testGetTollFee_taxableTimes(Date date, int expectedFee) {
-        int actualFee = calculator.GetTollFee(date, new Car());
+        int actualFee = calculator.getTollFee(date, new Car());
         assertEquals(expectedFee, actualFee);
     }
 
@@ -30,14 +33,14 @@ class CongestionTaxCalculatorGetTollFeeTest {
     @MethodSource("getTollFeeArgsForVehicles")
     void testGetTollFee_differentVehicles(Vehicle vehicle, int expectedFee) {
         Date date = new Date(2013, 1, 3, 6, 30);
-        int actualFee = calculator.GetTollFee(date, vehicle);
+        int actualFee = calculator.getTollFee(date, vehicle);
         assertEquals(expectedFee, actualFee);
     }
 
     @ParameterizedTest
     @MethodSource("getTollFeeArgsForTollFeeDates")
     void testGetTollFee_tollFeeDates(Date date, int expectedFee) {
-        int actualFee = calculator.GetTollFee(date, new Car());
+        int actualFee = calculator.getTollFee(date, new Car());
         assertEquals(expectedFee, actualFee);
     }
 
@@ -104,29 +107,29 @@ class CongestionTaxCalculatorGetTollFeeTest {
             Arguments.of(new Date(2013, 0, 1, 6, 0), 0),
 
             Arguments.of(new Date(2013, 2, 28, 6, 0), 0),
-            Arguments.of(new Date(2013,2, 29, 6, 0), 0),
+            Arguments.of(new Date(2013, 2, 29, 6, 0), 0),
 
             Arguments.of(new Date(2013, 3, 1, 6, 0), 0),
-            Arguments.of(new Date(2013,3, 30, 6, 0), 0),
+            Arguments.of(new Date(2013, 3, 30, 6, 0), 0),
 
             Arguments.of(new Date(2013, 4, 1, 6, 0), 0),
-            Arguments.of(new Date(2013,4, 8, 6, 0), 0),
+            Arguments.of(new Date(2013, 4, 8, 6, 0), 0),
             Arguments.of(new Date(2013, 4, 9, 6, 0), 0),
 
             Arguments.of(new Date(2013, 5, 5, 6, 0), 0),
-            Arguments.of(new Date(2013,5, 6, 6, 0), 0),
+            Arguments.of(new Date(2013, 5, 6, 6, 0), 0),
             Arguments.of(new Date(2013, 5, 21, 6, 0), 0),
 
-            // Any day of July?
-            Arguments.of(new Date(2013, 6, 21, 6, 0), 0),
+            Arguments.of(new Date(2013, 6, 1, 6, 0), 0),
+            Arguments.of(new Date(2013, 6, 15, 6, 0), 0),
+            Arguments.of(new Date(2013, 6, 31, 6, 0), 0),
 
             Arguments.of(new Date(2013, 10, 1, 6, 0), 0),
 
             Arguments.of(new Date(2013, 11, 24, 6, 0), 0),
             Arguments.of(new Date(2013, 11, 25, 6, 0), 0),
             Arguments.of(new Date(2013, 11, 26, 6, 0), 0),
-            Arguments.of(new Date(2013, 11,  31, 6, 0), 0)
-
+            Arguments.of(new Date(2013, 11, 31, 6, 0), 0)
         );
     }
 
