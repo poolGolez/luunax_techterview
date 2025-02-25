@@ -56,6 +56,8 @@ class CongestionTaxCalculatorGetTollFeeTest {
             Arguments.of(new Date(2013, 1, 3, 8, 29), 13),
 
             Arguments.of(new Date(2013, 1, 3, 8, 30), 8),
+            Arguments.of(new Date(2013, 1, 3, 9, 0), 8),
+            Arguments.of(new Date(2013, 1, 3, 14, 0), 8),
             Arguments.of(new Date(2013, 1, 3, 14, 59), 8),
 
             Arguments.of(new Date(2013, 1, 3, 15, 0), 13),
