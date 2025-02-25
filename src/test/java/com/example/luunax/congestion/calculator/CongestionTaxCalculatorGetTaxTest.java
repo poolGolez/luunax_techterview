@@ -58,4 +58,22 @@ class CongestionTaxCalculatorGetTaxTest {
 
         assertEquals(18, tax);
     }
+
+    @Test
+    void getTax_within1HourIntervalAndMultipleDays() throws ParseException {
+        Date[] dates = new Date[]{
+            DATE_PARSER.parse("2025-01-09 06:29:00"), // 8 (waived)
+            DATE_PARSER.parse("2025-01-09 07:29:00"), // 18
+
+            DATE_PARSER.parse("2025-01-15 07:59:00"), // 18
+            DATE_PARSER.parse("2025-01-15 08:13:00"), // 13 (waived)
+            DATE_PARSER.parse("2025-01-15 08:59:00"), // 8 (waived)
+
+            DATE_PARSER.parse("2025-01-16 08:48:00"), // 8
+        };
+
+        int tax = calculator.getTax(DEFAULT_VEHICLE, dates);
+
+        assertEquals(44, tax);
+    }
 }

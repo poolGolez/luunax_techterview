@@ -38,6 +38,7 @@ public class CongestionTaxCalculator {
                 totalFee += tempFee;
             } else {
                 totalFee += nextFee;
+                intervalStart = date;
             }
         }
 
