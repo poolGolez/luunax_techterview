@@ -20,6 +20,14 @@ class CongestionTaxCalculatorTest {
         assertEquals(expectedFee, actualFee);
     }
 
+    @ParameterizedTest
+    @MethodSource("getTollFeeArgsForVehicles")
+    void testGetTollFee_differentVehicles(Vehicle vehicle, int expectedFee) {
+        Date date = new Date(2013, 1, 3, 6, 30);
+        int actualFee = calculator.GetTollFee(date, vehicle);
+        assertEquals(expectedFee, actualFee);
+    }
+
     private static Stream<Arguments> getTollFeeArgsForTaxableTime() {
         return Stream.of(
             Arguments.of(new Date(2013, 1, 3, 6, 0), 8),
@@ -49,13 +57,23 @@ class CongestionTaxCalculatorTest {
             Arguments.of(new Date(2013, 1, 3, 18, 0), 8),
             Arguments.of(new Date(2013, 1, 3, 18, 29), 8),
 
-
             Arguments.of(new Date(2013, 1, 3, 18, 30), 0),
             Arguments.of(new Date(2013, 1, 3, 23, 59), 0),
             Arguments.of(new Date(2013, 1, 3, 0, 0), 0),
             Arguments.of(new Date(2013, 1, 3, 5, 59), 0)
+        );
+    }
 
-
+    private static Stream<Arguments> getTollFeeArgsForVehicles() {
+        return Stream.of(
+            Arguments.of(new Car(), 13),
+            Arguments.of(new Motorbike(), 13),
+            Arguments.of((Vehicle) () -> "Motorcycle", 0),
+            Arguments.of((Vehicle) () -> "Tractor", 0),
+            Arguments.of((Vehicle) () -> "Emergency", 0),
+            Arguments.of((Vehicle) () -> "Diplomat", 0),
+            Arguments.of((Vehicle) () -> "Foreign", 0),
+            Arguments.of((Vehicle) () -> "Military", 0)
         );
     }
 
