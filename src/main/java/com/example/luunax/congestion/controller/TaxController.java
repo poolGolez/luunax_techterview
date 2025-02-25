@@ -1,7 +1,7 @@
-package com.example.luunax.controller;
+package com.example.luunax.congestion.controller;
 
-import com.example.luunax.congestion.calculator.domain.Car;
-import com.example.luunax.congestion.calculator.domain.CongestionTaxCalculator;
+import com.example.luunax.congestion.calculator.Car;
+import com.example.luunax.congestion.calculator.CongestionTaxCalculator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

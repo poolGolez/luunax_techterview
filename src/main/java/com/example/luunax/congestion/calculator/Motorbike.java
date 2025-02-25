@@ -1,4 +1,4 @@
-package com.example.luunax.congestion.calculator.domain;
+package com.example.luunax.congestion.calculator;
 
 public class Motorbike implements Vehicle {
     @Override
