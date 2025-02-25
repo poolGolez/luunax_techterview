@@ -28,6 +28,13 @@ class CongestionTaxCalculatorTest {
         assertEquals(expectedFee, actualFee);
     }
 
+    @ParameterizedTest
+    @MethodSource("getTollFeeArgsForTollFeeDates")
+    void testGetTollFee_tollFeeDates(Date date, int expectedFee) {
+        int actualFee = calculator.GetTollFee(date, new Car());
+        assertEquals(expectedFee, actualFee);
+    }
+
     private static Stream<Arguments> getTollFeeArgsForTaxableTime() {
         return Stream.of(
             Arguments.of(new Date(2013, 1, 3, 6, 0), 8),
@@ -77,5 +84,42 @@ class CongestionTaxCalculatorTest {
         );
     }
 
+
+    private static Stream<Arguments> getTollFeeArgsForTollFeeDates() {
+        return Stream.of(
+            // Saturday
+            Arguments.of(new Date(2013, 0, 4, 6, 0), 0),
+            // Sunday
+            Arguments.of(new Date(2013, 0, 5, 6, 0), 0),
+
+            // Holidays
+            Arguments.of(new Date(2013, 0, 1, 6, 0), 0),
+
+            Arguments.of(new Date(2013, 2, 28, 6, 0), 0),
+            Arguments.of(new Date(2013,2, 29, 6, 0), 0),
+
+            Arguments.of(new Date(2013, 3, 1, 6, 0), 0),
+            Arguments.of(new Date(2013,3, 30, 6, 0), 0),
+
+            Arguments.of(new Date(2013, 4, 1, 6, 0), 0),
+            Arguments.of(new Date(2013,4, 8, 6, 0), 0),
+            Arguments.of(new Date(2013, 4, 9, 6, 0), 0),
+
+            Arguments.of(new Date(2013, 5, 5, 6, 0), 0),
+            Arguments.of(new Date(2013,5, 6, 6, 0), 0),
+            Arguments.of(new Date(2013, 5, 21, 6, 0), 0),
+
+            // Any day of July?
+            Arguments.of(new Date(2013, 6, 21, 6, 0), 0),
+
+            Arguments.of(new Date(2013, 10, 1, 6, 0), 0),
+
+            Arguments.of(new Date(2013, 11, 24, 6, 0), 0),
+            Arguments.of(new Date(2013, 11, 25, 6, 0), 0),
+            Arguments.of(new Date(2013, 11, 26, 6, 0), 0),
+            Arguments.of(new Date(2013, 11,  31, 6, 0), 0)
+
+        );
+    }
 
 }
