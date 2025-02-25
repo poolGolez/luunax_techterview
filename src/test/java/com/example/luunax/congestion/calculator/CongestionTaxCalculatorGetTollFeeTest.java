@@ -1,5 +1,6 @@
 package com.example.luunax.congestion.calculator;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -9,9 +10,14 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class CongestionTaxCalculatorTest {
+class CongestionTaxCalculatorGetTollFeeTest {
 
-    private CongestionTaxCalculator calculator = new CongestionTaxCalculator();
+    private CongestionTaxCalculator calculator;
+
+    @BeforeEach
+    void setUp() {
+        calculator= new CongestionTaxCalculator();
+    }
 
     @ParameterizedTest
     @MethodSource("getTollFeeArgsForTaxableTime")

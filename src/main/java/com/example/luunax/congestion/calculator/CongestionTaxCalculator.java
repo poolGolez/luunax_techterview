@@ -1,14 +1,10 @@
 package com.example.luunax.congestion.calculator;
 
-import org.springframework.stereotype.Service;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-
-@Service
 public class CongestionTaxCalculator {
 
     private static Map<String, Integer> tollFreeVehicles = new HashMap<>();
@@ -23,30 +19,28 @@ public class CongestionTaxCalculator {
 
     }
 
-    public int getTax(Vehicle vehicle, Date[] dates)
-    {
+    public int getTax(Vehicle vehicle, Date[] dates) {
         Date intervalStart = dates[0];
         int totalFee = 0;
 
-        for (int i = 0; i < dates.length ; i++) {
+        for (int i = 0; i < dates.length; i++) {
             Date date = dates[i];
             int nextFee = GetTollFee(date, vehicle);
             int tempFee = GetTollFee(intervalStart, vehicle);
+            System.out.println(nextFee);
 
             long diffInMillies = date.getTime() - intervalStart.getTime();
-            long durationInMinutes = diffInMillies/1000/60;
-            if (durationInMinutes <= 60)
-            {
+            long minutes = diffInMillies / 1000 / 60;
+
+            if (minutes <= 60) {
                 if (totalFee > 0) totalFee -= tempFee;
                 if (nextFee >= tempFee) tempFee = nextFee;
-                totalFee += tempFee; // get max one
-            }
-            else
-            {
+                totalFee += tempFee;
+            } else {
                 totalFee += nextFee;
             }
-        }                
-      
+        }
+
         if (totalFee > 60) totalFee = 60;
         return totalFee;
     }
@@ -57,22 +51,20 @@ public class CongestionTaxCalculator {
         return tollFreeVehicles.containsKey(vehicleType);
     }
 
-
-    // gets the fee of a vehicle based on the congestion date
-    public int GetTollFee(Date date, Vehicle vehicle)
-    {
+    public int GetTollFee(Date date, Vehicle vehicle) {
         if (IsTollFreeDate(date) || IsTollFreeVehicle(vehicle)) return 0;
 
         int hour = date.getHours();
         int minute = date.getMinutes();
 
-
-        // TODO: Inspect
         if (hour == 6 && minute >= 0 && minute <= 29) return 8;
         else if (hour == 6 && minute >= 30 && minute <= 59) return 13;
         else if (hour == 7 && minute >= 0 && minute <= 59) return 18;
         else if (hour == 8 && minute >= 0 && minute <= 29) return 13;
-        else if (hour >= 8 && hour <= 14 && minute >= 30 && minute <= 59) return 8;
+        else if (hour >= 8 && hour <= 14 && minute >= 30 && minute <= 59) {
+            // this does not work (10:11)
+            return 8;
+        }
         else if (hour == 15 && minute >= 0 && minute <= 29) return 13;
         else if (hour == 15 && minute >= 0 || hour == 16 && minute <= 59) return 18;
         else if (hour == 17 && minute >= 0 && minute <= 59) return 13;
@@ -80,8 +72,7 @@ public class CongestionTaxCalculator {
         else return 0;
     }
 
-    private Boolean IsTollFreeDate(Date date)
-    {
+    private Boolean IsTollFreeDate(Date date) {
         int year = date.getYear();
         int month = date.getMonth() + 1;
         int day = date.getDay() + 1;
@@ -89,17 +80,15 @@ public class CongestionTaxCalculator {
 
         if (day == Calendar.SATURDAY || day == Calendar.SUNDAY) return true;
 
-        if (year == 2013)
-        {
+        if (year == 2013) {
             if ((month == 1 && dayOfMonth == 1) ||
-                    (month == 3 && (dayOfMonth == 28 || dayOfMonth == 29)) ||
-                    (month == 4 && (dayOfMonth == 1 || dayOfMonth == 30)) ||
-                    (month == 5 && (dayOfMonth == 1 || dayOfMonth == 8 || dayOfMonth == 9)) ||
-                    (month == 6 && (dayOfMonth == 5 || dayOfMonth == 6 || dayOfMonth == 21)) ||
-                    (month == 7) ||
-                    (month == 11 && dayOfMonth == 1) ||
-                    (month == 12 && (dayOfMonth == 24 || dayOfMonth == 25 || dayOfMonth == 26 || dayOfMonth == 31)))
-            {
+                (month == 3 && (dayOfMonth == 28 || dayOfMonth == 29)) ||
+                (month == 4 && (dayOfMonth == 1 || dayOfMonth == 30)) ||
+                (month == 5 && (dayOfMonth == 1 || dayOfMonth == 8 || dayOfMonth == 9)) ||
+                (month == 6 && (dayOfMonth == 5 || dayOfMonth == 6 || dayOfMonth == 21)) ||
+                (month == 7) ||
+                (month == 11 && dayOfMonth == 1) ||
+                (month == 12 && (dayOfMonth == 24 || dayOfMonth == 25 || dayOfMonth == 26 || dayOfMonth == 31))) {
                 return true;
             }
         }
